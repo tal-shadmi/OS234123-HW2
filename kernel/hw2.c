@@ -7,7 +7,7 @@ asmlinkage long sys_hello(void) {
 	return 0;
 }
 
-asmlinkage int sys_set_weight(int weight){
+asmlinkage long sys_set_weight(int weight){
     if (weight < 0){
         return -EINVAL;
     }
@@ -15,12 +15,12 @@ asmlinkage int sys_set_weight(int weight){
     return 0;
 }
 
-asmlinkage int sys_get_weight(void){
+asmlinkage long sys_get_weight(void){
     return current->weight;
 }
 
-int get_children_sum_aux(struct task_struct* c){
-    int total_weight;
+long get_children_sum_aux(struct task_struct* c){
+    long total_weight;
     struct list_head* child;
     struct task_struct* task;
     if(list_empty(&(c->children))){
@@ -34,13 +34,13 @@ int get_children_sum_aux(struct task_struct* c){
     return total_weight;
 }
 
-asmlinkage int sys_get_children_sum(void){
+asmlinkage long sys_get_children_sum(void){
     if(list_empty(&(current->children))){
         return  -ECHILD;
     }
-    int save_weight = current->weight;
+    long save_weight = current->weight;
     current->weight = 0;
-    int sum = get_children_sum_aux(current);
+    long sum = get_children_sum_aux(current);
     current->weight = save_weight;
     return sum;
 }
