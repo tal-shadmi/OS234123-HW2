@@ -50,11 +50,11 @@ asmlinkage pid_t sys_get_heaviest_ancestor(void){
     pid_t pid = current->pid;
     struct task_struct* task = current;
     while(task->pid>0){
-        if(task->parent->weight>max_weight){
-            max_weight = task->parent->weight;
-            pid = task->parent->pid;
+        if(task->real_parent->weight>max_weight){
+            max_weight = task->real_parent->weight;
+            pid = task->real_parent->pid;
         }
-        task = task->parent;
+        task = task->real_parent;
     }
     return pid;
 }
